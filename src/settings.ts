@@ -4,5 +4,5 @@ export const dbConnectionString = `postgres://${process.env.POSTGRES_USER}:${pro
 
 export const urlData = {
   signUrl: "https://my.itmo.ru/api/sport/sign/schedule/lessons",
-  tokenUrl : "https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token"
+  tokenUrl: "https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token",
 };

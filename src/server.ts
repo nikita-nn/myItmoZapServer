@@ -2,7 +2,7 @@ import express from "express";
 import helmet from "helmet";
 import compression from "compression";
 import authRouter from "./routes/authRouter";
-import {signToLesson} from "./service/PE/PEService";
+import peRouter from "./routes/peRouter";
 
 const myItmoZap = express();
 
@@ -11,7 +11,6 @@ myItmoZap.use(compression());
 myItmoZap.use(express.json());
 
 myItmoZap.use("/api/v2/auth", authRouter);
+myItmoZap.use("/api/v2/pe", peRouter);
 
-myItmoZap.listen(5000,async () =>{
-    await  signToLesson(76368, "22222")
-});
+myItmoZap.listen(5000);
