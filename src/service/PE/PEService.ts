@@ -5,11 +5,7 @@ import { Users } from "../../db/schema/userSchema";
 import { and, eq } from "drizzle-orm";
 import { UserLessons } from "../../db/schema/userLessonsSchema";
 
-const signToLesson = async (
-  taskId: string,
-  accessToken: string,
-  isu_id: string,
-) => {
+const signToLesson = async (taskId: string, accessToken: string) => {
   const response = await fetch(urlData.signUrl, {
     method: "POST",
     headers: {
@@ -22,60 +18,75 @@ const signToLesson = async (
   const resData = await response.json();
   console.log(resData, response.status);
 
-  if (resData.error_code == 92) {
-    await refreshAccessToken(isu_id);
-  }
-
-  return response.status == 200;
+  return resData;
 };
 
-export const startMonitoring = async (isu_id: string, task_id: string) => {
-  let user = await db
-    .select()
-    .from(Users)
-    .where(eq(Users.isu_id, isu_id))
-    .then((users) => users[0]);
-
+export const startMonitoring = async (
+  user: typeof Users.$inferSelect,
+  task_id: string,
+) => {
   const newTask = await db
     .insert(UserLessons)
-    .values({ isu_id: isu_id, task_id: task_id })
+    .values({ isu_id: user.isu_id, task_id: task_id, active: true })
     .returning()
     .then((task) => task[0]);
 
   let accessToken = user.access_token;
   let isRunning = true;
+  let isActive = true;
 
   const executeTask = async () => {
     if (!accessToken) {
-      accessToken = await refreshAccessToken(isu_id);
+      accessToken = await refreshAccessToken(user.isu_id);
     }
 
-    const success = await signToLesson(task_id, accessToken, isu_id);
+    const resData = await signToLesson(task_id, accessToken);
 
-    if (success) {
-      isRunning = false;
+    switch (resData.error_code) {
+      case 0:
+        isRunning = false;
+        break;
+      case 92:
+        accessToken = await refreshAccessToken(user.isu_id);
     }
   };
 
-  const intervalId = setInterval(async () => {
-    if (isRunning) {
-      try {
-        await executeTask();
-      } catch (error) {
-        console.error("Error during task execution:", error);
-      }
-    } else {
-      await db
-        .update(UserLessons)
-        .set({ closedAt: new Date(), active: false })
-        .where(eq(UserLessons.id, newTask.id));
-      clearInterval(intervalId);
+  const taskIntervalId = setInterval(async () => {
+    if (!isRunning || !isActive) {
+      clearInterval(taskIntervalId);
+      return;
+    }
+
+    try {
+      await executeTask();
+    } catch (error) {
+      console.error("Error during task execution:", error);
     }
   }, 1000);
 
+  const activeCheckIntervalId = setInterval(async () => {
+    const task = await db
+      .select()
+      .from(UserLessons)
+      .where(eq(UserLessons.id, newTask.id))
+      .then((tasks) => tasks[0]);
+
+    if (!task || task.active === false) {
+      await db
+        .update(UserLessons)
+        .set({ closedAt: new Date() })
+        .where(eq(UserLessons.id, newTask.id));
+      isActive = false;
+      clearInterval(activeCheckIntervalId);
+      clearInterval(taskIntervalId);
+    }
+  }, 5000);
+
   return () => {
     isRunning = false;
-    clearInterval(intervalId);
+    isActive = false;
+    clearInterval(taskIntervalId);
+    clearInterval(activeCheckIntervalId);
   };
 };
 
@@ -88,6 +99,20 @@ export const checkExistingLesson = async (
     .from(UserLessons)
     .where(
       and(eq(UserLessons.isu_id, isu_id), eq(UserLessons.task_id, lesson_id)),
+    );
+
+  return lesson && lesson.filter((lesson) => lesson.active).length > 0;
+};
+
+export const checkUserLessonExistence = async (
+  isu_id: string,
+  task_id: string,
+) => {
+  const lesson = await db
+    .select()
+    .from(UserLessons)
+    .where(
+      and(eq(UserLessons.id, Number(task_id)), eq(UserLessons.isu_id, isu_id)),
     );
   return lesson.length > 0;
 };
