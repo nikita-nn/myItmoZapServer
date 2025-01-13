@@ -12,5 +12,4 @@ myItmoZap.use(express.json());
 
 myItmoZap.use("/api/v2/auth", authRouter);
 myItmoZap.use("/api/v2/pe", peRouter);
-
 myItmoZap.listen(5000);

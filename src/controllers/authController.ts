@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { authUser } from "../service/auth/authService";
+import {authUser, checkUser} from "../service/auth/authService";
 import { buildRes } from "../service/system/buildRes";
 
 export const authController = async (req: Request, res: Response) => {
@@ -12,3 +12,18 @@ export const authController = async (req: Request, res: Response) => {
 
   return buildRes(200, userData, res);
 };
+
+
+export const checkUserController = async (req: Request, res: Response) => {
+  const {isu_id} = req.body;
+  if(!isu_id) {
+    return buildRes(401, "No ISU ID provided", res);
+  }
+  const isUser = await checkUser(isu_id);
+
+  if(isUser) {
+    return buildRes(200, "User is existing in db", res);
+  }else{
+    return buildRes(401, "User is missing from db", res);
+  }
+}

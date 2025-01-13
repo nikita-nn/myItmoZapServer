@@ -1,9 +1,9 @@
-import { chromium, Cookie } from "playwright";
-import { db } from "../../db/db";
-import { Users } from "../../db/schema/userSchema";
-import { AuthData } from "../../types/authTypes";
-import { urlData } from "../../settings";
-import { eq } from "drizzle-orm";
+import {chromium, Cookie} from "playwright";
+import {db} from "../../db/db";
+import {Users} from "../../db/schema/userSchema";
+import {AuthData} from "../../types/authTypes";
+import {urlData} from "../../settings";
+import {eq} from "drizzle-orm";
 
 export const authUser = async (
   username: string,
@@ -110,3 +110,7 @@ export const refreshAccessToken = async (isu_id: string) => {
     return result.access_token;
   }
 };
+
+export const checkUser = async (isuId: string) =>{
+  return await db.select().from(Users).where(eq(Users.isu_id, isuId)).then((users) => users[0]);
+}

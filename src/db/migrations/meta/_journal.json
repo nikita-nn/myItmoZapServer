@@ -15,6 +15,13 @@
       "when": 1736772034571,
       "tag": "0001_lowly_the_hand",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1736782872255,
+      "tag": "0002_chilly_spencer_smythe",
+      "breakpoints": true
     }
   ]
 }

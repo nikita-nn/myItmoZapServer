@@ -5,13 +5,16 @@ import {
   signLessonController,
   stopLessonMonitoringController,
 } from "../controllers/peController";
+import {getLessonsController} from "../controllers/lessonsController";
 
 const peRouter = Router();
 
 peRouter.use(authMiddleware);
 
-peRouter.use("/sign", signLessonController);
-peRouter.use("/active", getAllUserLessonsController);
-peRouter.use("/stop", stopLessonMonitoringController);
+peRouter.post("/sign", signLessonController);
+peRouter.get("/active", getAllUserLessonsController);
+peRouter.post("/stop", stopLessonMonitoringController);
+
+peRouter.get("/lessons",  getLessonsController)
 
 export default peRouter;
