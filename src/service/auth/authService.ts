@@ -2,6 +2,8 @@ import { chromium, Cookie } from "playwright";
 import { db } from "../../db/db";
 import { Users } from "../../db/schema/userSchema";
 import { AuthData } from "../../types/authTypes";
+import {urlData} from "../../settings";
+import {eq} from "drizzle-orm";
 
 export const authUser = async (
   username: string,
@@ -35,13 +37,14 @@ export const authUser = async (
   if (!authTokenCookie?.value || !refreshTokenCookie?.value) {
     return null;
   }
-
-  return {
+  const data = {
     isu_id: String(isuId?.trim()),
     access_token: authTokenCookie?.value,
     refresh_token: refreshTokenCookie?.value,
     password: password,
-  };
+  }
+  await writeAuthDataToDB(data)
+  return data
 };
 
 export const writeAuthDataToDB = async (authData: AuthData) => {
@@ -61,5 +64,37 @@ export const writeAuthDataToDB = async (authData: AuthData) => {
   } catch (e) {
     console.error(e);
     return false;
+  }
+};
+
+
+export const refreshAccessToken = async (isu_id: string) => {
+
+  const user = await db.select().from(Users).where(eq(Users.isu_id, isu_id)).then((users)=> users[0])
+
+  if(!user){
+    return
+  }
+
+  const data = new URLSearchParams({
+    client_id: "student-personal-cabinet",
+    grant_type: "refresh_token",
+    refresh_token: user.refresh_token,
+  });
+
+  const response = await fetch(urlData.tokenUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: data,
+  });
+
+  const result = await response.json();
+
+  if(response.ok){
+    await db.update(Users).set({access_token: result.access_token}).where(eq(Users.isu_id, String(isu_id)))
+  }else{
+    await authUser(user.isu_id, user.password)
   }
 };

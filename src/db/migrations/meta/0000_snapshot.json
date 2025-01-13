@@ -1,5 +1,5 @@
 {
-  "id": "1818674d-aa17-4e91-beae-a18b75bee618",
+  "id": "3935f239-deee-46ba-bf56-ea92ab25a786",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -50,20 +50,62 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.users": {
-      "name": "users",
+    "public.userLessons": {
+      "name": "userLessons",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
           "type": "serial",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
-        "username": {
-          "name": "username",
+        "isu_id": {
+          "name": "isu_id",
           "type": "varchar",
           "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "closedAt": {
+          "name": "closedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userLessons_isu_id_users_isu_id_fk": {
+          "name": "userLessons_isu_id_users_isu_id_fk",
+          "tableFrom": "userLessons",
+          "tableTo": "users",
+          "columnsFrom": ["isu_id"],
+          "columnsTo": ["isu_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "isu_id": {
+          "name": "isu_id",
+          "type": "varchar",
+          "primaryKey": true,
           "notNull": true
         },
         "password": {
@@ -88,7 +130,13 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "users_isu_id_unique": {
+          "name": "users_isu_id_unique",
+          "nullsNotDistinct": false,
+          "columns": ["isu_id"]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
