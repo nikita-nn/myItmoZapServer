@@ -22,6 +22,34 @@
       "when": 1736782872255,
       "tag": "0002_chilly_spencer_smythe",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1736800301743,
+      "tag": "0003_panoramic_major_mapleleaf",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1736855516925,
+      "tag": "0004_closed_wind_dancer",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1736855578526,
+      "tag": "0005_daily_brother_voodoo",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1736855695714,
+      "tag": "0006_hot_saracen",
+      "breakpoints": true
     }
   ]
 }

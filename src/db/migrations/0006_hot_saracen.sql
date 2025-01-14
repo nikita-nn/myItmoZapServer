@@ -1,0 +1,1 @@
+ALTER TABLE "nodes" ALTER COLUMN "ping" SET DATA TYPE integer;
