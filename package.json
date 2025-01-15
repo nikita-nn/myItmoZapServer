@@ -1,6 +1,6 @@
 {
   "name": "myitmo-zap-server",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "src/server.ts",
   "scripts": {
