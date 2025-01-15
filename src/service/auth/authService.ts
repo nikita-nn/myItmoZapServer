@@ -1,15 +1,15 @@
-import {chromium, Cookie} from "playwright";
-import {db} from "../../db/db";
-import {Users} from "../../db/schema/userSchema";
-import {AuthData} from "../../types/authTypes";
-import {urlData} from "../../settings";
-import {eq} from "drizzle-orm";
+import { chromium, Cookie } from "playwright";
+import { db } from "../../db/db";
+import { Users } from "../../db/schema/userSchema";
+import { AuthData } from "../../types/authTypes";
+import { urlData } from "../../settings";
+import { eq } from "drizzle-orm";
 
 export const authUser = async (
   username: string,
   password: string,
 ): Promise<AuthData | null> => {
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto("https://my.itmo.ru");
@@ -37,6 +37,7 @@ export const authUser = async (
   if (!authTokenCookie?.value || !refreshTokenCookie?.value) {
     return null;
   }
+
   const data = {
     isu_id: String(isuId?.trim()),
     access_token: authTokenCookie?.value,
@@ -51,7 +52,11 @@ export const writeAuthDataToDB = async (authData: AuthData) => {
   try {
     await db
       .insert(Users)
-      .values({...authData , accessTokenIssued: new Date(), refreshTokenIssued: new Date()})
+      .values({
+        ...authData,
+        accessTokenIssued: new Date(),
+        refreshTokenIssued: new Date(),
+      })
       .onConflictDoUpdate({
         target: Users.isu_id,
         set: {
@@ -74,7 +79,6 @@ export const refreshAccessToken = async (isu_id: string) => {
     .where(eq(Users.isu_id, isu_id))
     .then((users) => users[0]);
 
-
   if (!user) {
     return;
   }
@@ -86,7 +90,7 @@ export const refreshAccessToken = async (isu_id: string) => {
   const isMoreThan30Minutes = differenceMs > 30 * 60 * 1000;
 
   if (!isMoreThan30Minutes) {
-    return user.access_token
+    return user.access_token;
   }
 
   const data = new URLSearchParams({
@@ -118,11 +122,23 @@ export const refreshAccessToken = async (isu_id: string) => {
       return null;
     }
 
-    await db.update(Users).set({access_token: result.access_token, refresh_token: result.refresh_token, accessTokenIssued: new Date() , refreshTokenIssued: new Date()}).where(eq(Users.isu_id, String(isu_id)));
+    await db
+      .update(Users)
+      .set({
+        access_token: result.access_token,
+        refresh_token: result.refresh_token,
+        accessTokenIssued: new Date(),
+        refreshTokenIssued: new Date(),
+      })
+      .where(eq(Users.isu_id, String(isu_id)));
     return result.access_token;
   }
 };
 
-export const checkUser = async (isuId: string) =>{
-  return await db.select().from(Users).where(eq(Users.isu_id, isuId)).then((users) => users[0]);
-}
+export const checkUser = async (isuId: string) => {
+  return await db
+    .select()
+    .from(Users)
+    .where(eq(Users.isu_id, isuId))
+    .then((users) => users[0]);
+};

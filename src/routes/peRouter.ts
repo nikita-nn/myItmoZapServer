@@ -7,7 +7,7 @@ import {
 } from "../controllers/peController";
 import {
   getInitialLessonsInfoController,
-  getLessonsController
+  getLessonsController,
 } from "../controllers/lessonsController";
 
 const peRouter = Router();
@@ -18,7 +18,7 @@ peRouter.post("/sign", signLessonController);
 peRouter.get("/active", getAllUserLessonsController);
 peRouter.post("/stop", stopLessonMonitoringController);
 
-peRouter.get("/lessons_initial", getInitialLessonsInfoController)
-peRouter.get("/lessons",  getLessonsController)
+peRouter.get("/lessons_initial", getInitialLessonsInfoController);
+peRouter.get("/lessons", getLessonsController);
 
 export default peRouter;

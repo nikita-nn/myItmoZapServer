@@ -9,10 +9,10 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const isuId = String(req.headers["x-username"])
-  const password = String(req.headers["x-password"])
+  const isuId = String(req.headers["x-username"]);
+  const password = String(req.headers["x-password"]);
 
-  if(!isuId || !password){
+  if (!isuId || !password) {
     return buildRes(401, "Access denied. No password or isu_id", res);
   }
 

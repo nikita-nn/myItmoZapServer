@@ -1,7 +1,5 @@
-import {Router} from "express";
+import { Router } from "express";
 
 const instanceRouter = Router();
-
-
 
 export default instanceRouter;

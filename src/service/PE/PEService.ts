@@ -1,8 +1,8 @@
-import {urlData} from "../../settings";
-import {refreshAccessToken} from "../auth/authService";
-import {db} from "../../db/db";
-import {and, eq} from "drizzle-orm";
-import {UserLessons} from "../../db/schema/userLessonsSchema";
+import { urlData } from "../../settings";
+import { refreshAccessToken } from "../auth/authService";
+import { db } from "../../db/db";
+import { and, eq } from "drizzle-orm";
+import { UserLessons } from "../../db/schema/userLessonsSchema";
 
 const signToLesson = async (taskId: string, accessToken: string) => {
   const response = await fetch(urlData.signUrl, {
@@ -17,10 +17,7 @@ const signToLesson = async (taskId: string, accessToken: string) => {
   return await response.json();
 };
 
-export const startMonitoring = async (
-  isu_id: string,
-  task_id: string,
-) => {
+export const startMonitoring = async (isu_id: string, task_id: string) => {
   const newTask = await db
     .insert(UserLessons)
     .values({ isu_id: isu_id, task_id: task_id, active: true })
@@ -37,7 +34,6 @@ export const startMonitoring = async (
     }
 
     const resData = await signToLesson(task_id, accessToken);
-
     switch (resData.error_code) {
       case 0:
         isRunning = false;
@@ -50,6 +46,15 @@ export const startMonitoring = async (
   const taskIntervalId = setInterval(async () => {
     if (!isRunning || !isActive) {
       clearInterval(taskIntervalId);
+      await db
+        .update(UserLessons)
+        .set({
+          active: false,
+          closedAt: new Date(),
+        })
+        .where(
+          and(eq(UserLessons.isu_id, isu_id), eq(UserLessons.task_id, task_id)),
+        );
       return;
     }
 
@@ -94,7 +99,11 @@ export const checkExistingLesson = async (
     .select()
     .from(UserLessons)
     .where(
-      and(eq(UserLessons.isu_id, isu_id), eq(UserLessons.task_id, lesson_id), eq(UserLessons.active, true)),
+      and(
+        eq(UserLessons.isu_id, isu_id),
+        eq(UserLessons.task_id, lesson_id),
+        eq(UserLessons.active, true),
+      ),
     );
 
   return userLessons.length > 0;

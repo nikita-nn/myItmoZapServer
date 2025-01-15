@@ -40,9 +40,7 @@
         "nodes_name_unique": {
           "name": "nodes_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -98,12 +96,8 @@
           "name": "userLessons_isu_id_users_isu_id_fk",
           "tableFrom": "userLessons",
           "tableTo": "users",
-          "columnsFrom": [
-            "isu_id"
-          ],
-          "columnsTo": [
-            "isu_id"
-          ],
+          "columnsFrom": ["isu_id"],
+          "columnsTo": ["isu_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -150,9 +144,7 @@
         "users_isu_id_unique": {
           "name": "users_isu_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "isu_id"
-          ]
+          "columns": ["isu_id"]
         }
       },
       "policies": {},
