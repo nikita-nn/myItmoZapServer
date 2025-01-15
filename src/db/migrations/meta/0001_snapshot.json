@@ -1,16 +1,22 @@
 {
-  "id": "81fbccaa-1915-4c07-9365-4367c0076055",
-  "prevId": "3935f239-deee-46ba-bf56-ea92ab25a786",
+  "id": "24250ed7-c9c5-4443-b461-c4215a4245a1",
+  "prevId": "c2905961-f4bd-4ed9-993f-84df8f7547b9",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.instances": {
-      "name": "instances",
+    "public.nodes": {
+      "name": "nodes",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
           "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -20,32 +26,25 @@
           "primaryKey": false,
           "notNull": true
         },
-        "requests": {
-          "name": "requests",
-          "type": "varchar",
+        "ping": {
+          "name": "ping",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true
-        },
-        "isReady": {
-          "name": "isReady",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "loadStatus": {
-          "name": "loadStatus",
-          "type": "loadEnum",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'light'"
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "nodes_name_unique": {
+          "name": "nodes_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -99,8 +98,12 @@
           "name": "userLessons_isu_id_users_isu_id_fk",
           "tableFrom": "userLessons",
           "tableTo": "users",
-          "columnsFrom": ["isu_id"],
-          "columnsTo": ["isu_id"],
+          "columnsFrom": [
+            "isu_id"
+          ],
+          "columnsTo": [
+            "isu_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -138,6 +141,18 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "accessTokenIssued": {
+          "name": "accessTokenIssued",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refreshTokenIssued": {
+          "name": "refreshTokenIssued",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -147,7 +162,9 @@
         "users_isu_id_unique": {
           "name": "users_isu_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["isu_id"]
+          "columns": [
+            "isu_id"
+          ]
         }
       },
       "policies": {},
@@ -155,13 +172,7 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {
-    "public.loadEnum": {
-      "name": "loadEnum",
-      "schema": "public",
-      "values": ["light", "medium", "hard"]
-    }
-  },
+  "enums": {},
   "schemas": {},
   "sequences": {},
   "roles": {},

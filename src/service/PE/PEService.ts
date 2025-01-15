@@ -1,9 +1,8 @@
-import { urlData } from "../../settings";
-import { refreshAccessToken } from "../auth/authService";
-import { db } from "../../db/db";
-import { Users } from "../../db/schema/userSchema";
-import { and, eq } from "drizzle-orm";
-import { UserLessons } from "../../db/schema/userLessonsSchema";
+import {urlData} from "../../settings";
+import {refreshAccessToken} from "../auth/authService";
+import {db} from "../../db/db";
+import {and, eq} from "drizzle-orm";
+import {UserLessons} from "../../db/schema/userLessonsSchema";
 
 const signToLesson = async (taskId: string, accessToken: string) => {
   const response = await fetch(urlData.signUrl, {
@@ -15,29 +14,26 @@ const signToLesson = async (taskId: string, accessToken: string) => {
     body: `[${taskId}]`,
   });
 
-  const resData = await response.json();
-  console.log(resData, response.status);
-
-  return resData;
+  return await response.json();
 };
 
 export const startMonitoring = async (
-  user: typeof Users.$inferSelect,
+  isu_id: string,
   task_id: string,
 ) => {
   const newTask = await db
     .insert(UserLessons)
-    .values({ isu_id: user.isu_id, task_id: task_id, active: true })
+    .values({ isu_id: isu_id, task_id: task_id, active: true })
     .returning()
     .then((task) => task[0]);
 
-  let accessToken = user.access_token;
+  let accessToken = await refreshAccessToken(isu_id);
   let isRunning = true;
   let isActive = true;
 
   const executeTask = async () => {
     if (!accessToken) {
-      accessToken = await refreshAccessToken(user.isu_id);
+      accessToken = await refreshAccessToken(isu_id);
     }
 
     const resData = await signToLesson(task_id, accessToken);
@@ -47,7 +43,7 @@ export const startMonitoring = async (
         isRunning = false;
         break;
       case 92:
-        accessToken = await refreshAccessToken(user.isu_id);
+        accessToken = await refreshAccessToken(isu_id);
     }
   };
 
@@ -94,14 +90,14 @@ export const checkExistingLesson = async (
   lesson_id: string,
   isu_id: string,
 ) => {
-  const lesson = await db
+  const userLessons = await db
     .select()
     .from(UserLessons)
     .where(
-      and(eq(UserLessons.isu_id, isu_id), eq(UserLessons.task_id, lesson_id)),
+      and(eq(UserLessons.isu_id, isu_id), eq(UserLessons.task_id, lesson_id), eq(UserLessons.active, true)),
     );
 
-  return lesson && lesson.filter((lesson) => lesson.active).length > 0;
+  return userLessons.length > 0;
 };
 
 export const checkUserLessonExistence = async (

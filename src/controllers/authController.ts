@@ -4,13 +4,17 @@ import { buildRes } from "../service/system/buildRes";
 
 export const authController = async (req: Request, res: Response) => {
   const { isu_id, password } = req.body;
-  const userData = await authUser(isu_id, password);
+  try{
+    const userData = await authUser(isu_id, password);
+    if (!userData) {
+      return buildRes(401, "Incorrect username or password", res);
+    }
 
-  if (!userData) {
-    return buildRes(401, "Incorrect username or password", res);
+    return buildRes(200, userData, res);
+  }catch(e){
+    return buildRes(500, "Server error", res);
   }
 
-  return buildRes(200, userData, res);
 };
 
 

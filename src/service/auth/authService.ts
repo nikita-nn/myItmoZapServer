@@ -51,7 +51,7 @@ export const writeAuthDataToDB = async (authData: AuthData) => {
   try {
     await db
       .insert(Users)
-      .values(authData)
+      .values({...authData , accessTokenIssued: new Date(), refreshTokenIssued: new Date()})
       .onConflictDoUpdate({
         target: Users.isu_id,
         set: {
@@ -74,8 +74,19 @@ export const refreshAccessToken = async (isu_id: string) => {
     .where(eq(Users.isu_id, isu_id))
     .then((users) => users[0]);
 
+
   if (!user) {
     return;
+  }
+  const accessTokenIssued = new Date(user.accessTokenIssued);
+  const now = new Date();
+
+  const differenceMs = now.getTime() - accessTokenIssued.getTime();
+
+  const isMoreThan30Minutes = differenceMs > 30 * 60 * 1000;
+
+  if (!isMoreThan30Minutes) {
+    return user.access_token
   }
 
   const data = new URLSearchParams({
@@ -97,7 +108,7 @@ export const refreshAccessToken = async (isu_id: string) => {
   if (response.ok) {
     await db
       .update(Users)
-      .set({ access_token: result.access_token })
+      .set({ access_token: result.access_token, accessTokenIssued: new Date() })
       .where(eq(Users.isu_id, String(isu_id)));
     return result.access_token;
   } else {
@@ -107,6 +118,7 @@ export const refreshAccessToken = async (isu_id: string) => {
       return null;
     }
 
+    await db.update(Users).set({access_token: result.access_token, refresh_token: result.refresh_token, accessTokenIssued: new Date() , refreshTokenIssued: new Date()}).where(eq(Users.isu_id, String(isu_id)));
     return result.access_token;
   }
 };

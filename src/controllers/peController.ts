@@ -29,7 +29,7 @@ export const signLessonController = async (req: Request, res: Response) => {
     );
   }
 
-  await startMonitoring(req.user, lesson_id);
+  await startMonitoring(req.user.isu_id, lesson_id);
 
   return buildRes(
     200,

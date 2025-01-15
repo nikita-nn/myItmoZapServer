@@ -9,15 +9,21 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { isu_id, token } = req.body;
+  const isuId = String(req.headers["x-username"])
+  const password = String(req.headers["x-password"])
+
+  if(!isuId || !password){
+    return buildRes(401, "Access denied. No password or isu_id", res);
+  }
 
   const user = await db
     .select()
     .from(Users)
-    .where(eq(Users.isu_id, isu_id))
+    .where(eq(Users.isu_id, isuId))
     .then((users) => users[0]);
-  if (!user || token != user.refresh_token) {
-    return buildRes(401, "Access denied. Invalid token or isu_id", res);
+
+  if (!user || password != user.password) {
+    return buildRes(401, "Access denied. Invalid password or isu_id", res);
   }
   req.user = user;
   next();

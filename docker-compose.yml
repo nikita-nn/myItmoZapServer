@@ -1,16 +1,17 @@
 version: "3.8"
 
 services:
-  zap-redis:
-    image: redis:alpine
-    container_name: zap_redis
+  zap-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend_feedback
     env_file:
       - .env
-    command: /bin/sh -c "redis-server --requirepass $$REDIS_PASSWORD"
     ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
+      - "${PORT}:${PORT}"
+    depends_on:
+      - zap-db
   zap-db:
     image: postgres:14
     container_name: zap_db
@@ -21,5 +22,5 @@ services:
     volumes:
       - postgres_data_hash:/var/lib/postgresql/data
 volumes:
-  redis-data:
+
   postgres_data_hash:

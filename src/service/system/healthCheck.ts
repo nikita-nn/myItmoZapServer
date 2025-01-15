@@ -1,8 +1,9 @@
 import {db} from "../../db/db";
 import {Nodes} from "../../db/schema/nodesSchema";
-import ping from "ping"
 import {urlData} from "../../settings";
 import {eq} from "drizzle-orm";
+import {UserLessons} from "../../db/schema/userLessonsSchema";
+import {startMonitoring} from "../PE/PEService";
 
 const measurePing = async (url: string) => {
     try {
@@ -28,4 +29,13 @@ export const checkNodePing = async () => {
     const nodeName = String(process.env.NODE_NAME)
     const ping = await measurePing(urlData.myItmo)
     await db.update(Nodes).set({ping:ping}).where(eq(Nodes.name, nodeName))
+}
+
+export const restartActiveTasks = async () =>{
+    const lessonTasks = await db.select().from(UserLessons).where(eq(UserLessons.active, true));
+
+    for(const lesson of lessonTasks){
+        await startMonitoring(String(lesson.isu_id), lesson.task_id)
+    }
+
 }

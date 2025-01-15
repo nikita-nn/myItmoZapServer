@@ -1,17 +1,18 @@
-CREATE TYPE "public"."loadEnum" AS ENUM('light', 'medium', 'hard');--> statement-breakpoint
-CREATE TABLE "instances" (
-	"id" serial NOT NULL,
+CREATE TABLE "nodes" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"url" varchar NOT NULL,
 	"name" varchar NOT NULL,
-	"requests" varchar NOT NULL,
-	"isReady" boolean DEFAULT false NOT NULL,
-	"loadStatus" "loadEnum" DEFAULT 'light' NOT NULL
+	"ping" integer,
+	CONSTRAINT "nodes_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
 CREATE TABLE "userLessons" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"isu_id" varchar,
+	"task_id" varchar NOT NULL,
 	"createdAt" timestamp DEFAULT now(),
-	"closedAt" timestamp
+	"closedAt" timestamp,
+	"active" boolean DEFAULT true NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
