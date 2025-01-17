@@ -1,9 +1,68 @@
 {
-  "id": "c2905961-f4bd-4ed9-993f-84df8f7547b9",
+  "id": "0cc82fcf-9236-4fc6-ad95-8bb4e890a2ba",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.premiumKeys": {
+      "name": "premiumKeys",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "activatedAt": {
+          "name": "activatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "activatedBy": {
+          "name": "activatedBy",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "key": {
+          "name": "key",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "premiumKeys_activatedBy_users_isu_id_fk": {
+          "name": "premiumKeys_activatedBy_users_isu_id_fk",
+          "tableFrom": "premiumKeys",
+          "tableTo": "users",
+          "columnsFrom": [
+            "activatedBy"
+          ],
+          "columnsTo": [
+            "isu_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "premiumKeys_key_unique": {
+          "name": "premiumKeys_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "key"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.nodes": {
       "name": "nodes",
       "schema": "",
@@ -40,7 +99,9 @@
         "nodes_name_unique": {
           "name": "nodes_name_unique",
           "nullsNotDistinct": false,
-          "columns": ["name"]
+          "columns": [
+            "name"
+          ]
         }
       },
       "policies": {},
@@ -96,8 +157,12 @@
           "name": "userLessons_isu_id_users_isu_id_fk",
           "tableFrom": "userLessons",
           "tableTo": "users",
-          "columnsFrom": ["isu_id"],
-          "columnsTo": ["isu_id"],
+          "columnsFrom": [
+            "isu_id"
+          ],
+          "columnsTo": [
+            "isu_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -135,6 +200,18 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "accessTokenIssued": {
+          "name": "accessTokenIssued",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refreshTokenIssued": {
+          "name": "refreshTokenIssued",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -144,7 +221,9 @@
         "users_isu_id_unique": {
           "name": "users_isu_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["isu_id"]
+          "columns": [
+            "isu_id"
+          ]
         }
       },
       "policies": {},

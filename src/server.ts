@@ -10,6 +10,7 @@ import {
   restartActiveTasks,
 } from "./service/system/healthCheck";
 import cron from "node-cron";
+import keysRouter from "./routes/keysRouter";
 
 const myItmoZap = express();
 
@@ -20,6 +21,7 @@ myItmoZap.use(express.json());
 myItmoZap.use("/api/v2/auth", authRouter);
 myItmoZap.use("/api/v2/pe", peRouter);
 myItmoZap.use("/api/v2/nodes", nodesRouter);
+myItmoZap.use("/api/v2/keys", keysRouter);
 
 myItmoZap.listen(5000, async () => {
   await healthCheck();
