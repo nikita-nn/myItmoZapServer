@@ -9,7 +9,7 @@ import { Users } from "./userSchema";
 
 export const UserLessons = pgTable("userLessons", {
   id: serial("id").primaryKey(),
-  isu_id: varchar("isu_id").references(() => Users.isu_id),
+  isu_id: varchar("isu_id").references(() => Users.isu_id, {onUpdate: "cascade", onDelete: "cascade"}),
   task_id: varchar("task_id").notNull(),
   createdAt: timestamp().defaultNow(),
   closedAt: timestamp(),

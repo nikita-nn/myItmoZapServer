@@ -1,5 +1,5 @@
 {
-  "id": "0cc82fcf-9236-4fc6-ad95-8bb4e890a2ba",
+  "id": "75d39d0d-cd8a-4ca9-b41b-98527c7c88e1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -45,8 +45,8 @@
           "columnsTo": [
             "isu_id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -163,8 +163,8 @@
           "columnsTo": [
             "isu_id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -212,6 +212,25 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
+        },
+        "botToken": {
+          "name": "botToken",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tgAccountId": {
+          "name": "tgAccountId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notificationsEnabled": {
+          "name": "notificationsEnabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},
