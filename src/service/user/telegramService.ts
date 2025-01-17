@@ -36,8 +36,6 @@ export const sendMessageToTG = async (isu_id: string, text: string) =>{
         body: new URLSearchParams(params)
     });
 
-    const json = await res.json()
-    console.log(json)
     return true
 }
 
