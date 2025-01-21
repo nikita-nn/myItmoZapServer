@@ -9,4 +9,7 @@ export const urlData = {
   myItmo: "https://my.itmo.ru",
   lessonsData: "https://my.itmo.ru/api/sport/sign/schedule/filters",
   fullLessonsData: "https://my.itmo.ru/api/sport/sign/schedule",
+  electionGetDisciplines:
+    "https://dev.my.itmo.su/api/election/students/available_disciplines",
+  getQR: "https://qr.itmo.su/v1/user/pass",
 };

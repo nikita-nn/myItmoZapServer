@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import {
   getLessonsData,
   getLessonsFullData,
-} from "../service/PE/lessonsService";
-import { buildRes } from "../service/system/buildRes";
+} from "../../service/PE/lessonsService";
+import { buildRes } from "../../service/system/buildRes";
 
 export const getInitialLessonsInfoController = async (
   req: Request,

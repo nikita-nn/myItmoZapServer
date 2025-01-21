@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { authUser, checkUser } from "../service/auth/authService";
-import { buildRes } from "../service/system/buildRes";
+import { authUser, checkUser } from "../../service/auth/authService";
+import { buildRes } from "../../service/system/buildRes";
 
 export const authController = async (req: Request, res: Response) => {
   const { isu_id, password } = req.body;

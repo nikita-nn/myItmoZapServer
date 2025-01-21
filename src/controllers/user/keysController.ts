@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { buildRes } from "../service/system/buildRes";
-import { db } from "../db/db";
-import { Keys } from "../db/schema/keysSchema";
+import { buildRes } from "../../service/system/buildRes";
+import { db } from "../../db/db";
+import { Keys } from "../../db/schema/keysSchema";
 import { and, eq } from "drizzle-orm";
-import { Users } from "../db/schema/userSchema";
+import { Users } from "../../db/schema/userSchema";
 
 export const activateKeyController = async (req: Request, res: Response) => {
   const { key } = req.body;

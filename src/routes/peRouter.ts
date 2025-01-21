@@ -4,11 +4,11 @@ import {
   getAllUserLessonsController,
   signLessonController,
   stopLessonMonitoringController,
-} from "../controllers/peController";
+} from "../controllers/pe/peController";
 import {
   getInitialLessonsInfoController,
   getLessonsController,
-} from "../controllers/lessonsController";
+} from "../controllers/pe/lessonsController";
 
 const peRouter = Router();
 

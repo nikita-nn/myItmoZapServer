@@ -4,7 +4,7 @@ import {
   activateKeyController,
   checkKeyController,
   relinkKeyToAccountController,
-} from "../controllers/keysController";
+} from "../controllers/user/keysController";
 import { keyCheckMiddleware } from "../middlewares/keyCheckMiddleware";
 
 const keysRouter = Router();

@@ -1,5 +1,5 @@
 {
-  "id": "75d39d0d-cd8a-4ca9-b41b-98527c7c88e1",
+  "id": "89b99d08-6beb-43ed-b2c5-e515584b32e1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -39,12 +39,8 @@
           "name": "premiumKeys_activatedBy_users_isu_id_fk",
           "tableFrom": "premiumKeys",
           "tableTo": "users",
-          "columnsFrom": [
-            "activatedBy"
-          ],
-          "columnsTo": [
-            "isu_id"
-          ],
+          "columnsFrom": ["activatedBy"],
+          "columnsTo": ["isu_id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -54,9 +50,7 @@
         "premiumKeys_key_unique": {
           "name": "premiumKeys_key_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "key"
-          ]
+          "columns": ["key"]
         }
       },
       "policies": {},
@@ -99,9 +93,7 @@
         "nodes_name_unique": {
           "name": "nodes_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -157,12 +149,8 @@
           "name": "userLessons_isu_id_users_isu_id_fk",
           "tableFrom": "userLessons",
           "tableTo": "users",
-          "columnsFrom": [
-            "isu_id"
-          ],
-          "columnsTo": [
-            "isu_id"
-          ],
+          "columnsFrom": ["isu_id"],
+          "columnsTo": ["isu_id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -240,9 +228,7 @@
         "users_isu_id_unique": {
           "name": "users_isu_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "isu_id"
-          ]
+          "columns": ["isu_id"]
         }
       },
       "policies": {},

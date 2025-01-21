@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { buildRes } from "../service/system/buildRes";
+import { buildRes } from "../../service/system/buildRes";
 import {
   checkExistingLesson,
   checkUserLessonExistence,
   startMonitoring,
-} from "../service/PE/PEService";
-import { db } from "../db/db";
-import { UserLessons } from "../db/schema/userLessonsSchema";
+} from "../../service/PE/PEService";
+import { db } from "../../db/db";
+import { UserLessons } from "../../db/schema/userLessonsSchema";
 import { and, eq } from "drizzle-orm";
 
 export const signLessonController = async (req: Request, res: Response) => {

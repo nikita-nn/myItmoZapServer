@@ -9,7 +9,7 @@ export const authUser = async (
   username: string,
   password: string,
 ): Promise<AuthData | null> => {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto("https://my.itmo.ru");

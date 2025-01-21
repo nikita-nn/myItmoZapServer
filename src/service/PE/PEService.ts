@@ -3,7 +3,10 @@ import { refreshAccessToken } from "../auth/authService";
 import { db } from "../../db/db";
 import { and, eq } from "drizzle-orm";
 import { UserLessons } from "../../db/schema/userLessonsSchema";
-import { checkTelegramLinkStatus, sendMessageToTG} from "../user/telegramService";
+import {
+  checkTelegramLinkStatus,
+  sendMessageToTG,
+} from "../user/telegramService";
 
 const signToLesson = async (taskId: string, accessToken: string) => {
   const response = await fetch(urlData.signUrl, {
@@ -48,7 +51,7 @@ export const startMonitoring = async (isu_id: string, task_id: string) => {
   const taskIntervalId = setInterval(async () => {
     if (!isRunning || !isActive) {
       clearInterval(taskIntervalId);
-      if(canSendMessageData){
+      if (canSendMessageData) {
         await sendMessageToTG(isu_id, `Successfully finished ${task_id}`);
       }
       await db
@@ -89,7 +92,7 @@ export const startMonitoring = async (isu_id: string, task_id: string) => {
   }, 5000);
 
   return async () => {
-    if(canSendMessageData){
+    if (canSendMessageData) {
       await sendMessageToTG(isu_id, `Successfully finished ${task_id}`);
     }
     isRunning = false;

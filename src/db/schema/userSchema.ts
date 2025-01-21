@@ -1,4 +1,4 @@
-import {boolean, pgTable, timestamp, varchar} from "drizzle-orm/pg-core";
+import { boolean, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export const Users = pgTable("users", {
   isu_id: varchar("isu_id").notNull().unique().primaryKey(),
@@ -9,5 +9,5 @@ export const Users = pgTable("users", {
   refreshTokenIssued: timestamp("refreshTokenIssued").notNull(),
   botToken: varchar("botToken"), // Telegram bot token
   tgAccountId: varchar("tgAccountId"),
-  notificationsEnabled: boolean().notNull().default(false)
+  notificationsEnabled: boolean().notNull().default(false),
 });
