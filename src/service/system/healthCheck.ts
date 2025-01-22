@@ -44,6 +44,6 @@ export const restartActiveTasks = async () => {
     .where(eq(UserLessons.active, true));
 
   for (const lesson of lessonTasks) {
-    await startMonitoring(String(lesson.isu_id), lesson.task_id);
+    await startMonitoring(String(lesson.isu_id), lesson.task_id, lesson);
   }
 };

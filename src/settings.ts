@@ -12,4 +12,5 @@ export const urlData = {
   electionGetDisciplines:
     "https://dev.my.itmo.su/api/election/students/available_disciplines",
   getQR: "https://qr.itmo.su/v1/user/pass",
+  orderElection: "https://dev.my.itmo.su/api/election/students/order/"
 };

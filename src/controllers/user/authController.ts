@@ -12,7 +12,7 @@ export const authController = async (req: Request, res: Response) => {
 
     return buildRes(200, userData, res);
   } catch (e) {
-    return buildRes(500, "Server error", res);
+    return buildRes(500, `Server error ${e.message}`, res);
   }
 };
 
